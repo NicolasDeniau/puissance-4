@@ -18,7 +18,7 @@ const Column = ({index, matrix}: ColumnProps) => {
     }
 
     return (
-        <div className="column" onClick={handleClick}>
+        <div className="column" data-index={index} onClick={handleClick}>
             { internalMatrix[index].map((cell, index) => (
                 <div className={`cell cell-${cell}`} key={index}>
                     { cell }

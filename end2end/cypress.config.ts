@@ -12,6 +12,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       //
     },
-    baseUrl: 'http://localhost:5173'
+    baseUrl: 'http://localhost:5173',
+    supportFile: false
   },
 })
