@@ -1,0 +1,42 @@
+name: Deploy
+
+on:
+  push:
+    branches: "main"
+
+
+concurrency:
+  group: "surge"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install packages
+        run: npm ci
+
+      - name: Tests coverage
+        run: npm run coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to surge
+        run: |
+          npm install -g surge
+          surge ./dist --domain ${{ secrets.SURGE_DOMAIN }} --token ${{ secrets.SURGE_TOKEN }}
+
+      - name: Upload error report
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: error-report
+          path: ./coverage.json
